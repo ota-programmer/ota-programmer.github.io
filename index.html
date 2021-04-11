@@ -2,10 +2,18 @@
 <html lang="en">
 <title>OTA Programmer</title>
 <meta charset="UTF-8">
+<meta name="gc:base" content="http://lab.lepture.com/github-cards/">
+<meta name="gc:theme" content="medium">
+<meta name="gc:client-id" content="client id string">
+<meta name="gc:client-secret" content="client secret string">
+
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="icon.png">
 <style>
     body {
         font-family: "Lato", sans-serif
@@ -25,9 +33,11 @@
                 href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i
                     class="fa fa-bars"></i></a>
             <a href="#home" class="w3-bar-item w3-button w3-padding-large">HOME</a>
-            <a href="#testing" class="w3-bar-item w3-button w3-padding-large w3-hide-small">TESTING & UPLOADING</a>
-            <a href="#band" class="w3-bar-item w3-button w3-padding-large w3-hide-small">DEVELOPER</a>
-            <a href="#tour" class="w3-bar-item w3-button w3-padding-large w3-hide-small">GITHUB</a>
+            <a href="#usage" class="w3-bar-item w3-button w3-padding-large">USAGE</a>
+            <a href="#testing" class="w3-bar-item w3-button w3-padding-large w3-hide-small">TESTING</a>
+            <a href="#uploading" class="w3-bar-item w3-button w3-padding-large w3-hide-small">UPLOADING</a>
+            <a href="#code" class="w3-bar-item w3-button w3-padding-large w3-hide-small">CODE</a>
+            <a href="#developer" class="w3-bar-item w3-button w3-padding-large w3-hide-small">DEVELOPER</a>
         </div>
     </div>
 
@@ -45,173 +55,136 @@
                 to write the code using the Boot Loader flashed on STM.</p>
 
         </div>
+        <h2 class="divider donotcross" contenteditable></h2>
+
+        <!-- The Usage Section -->
+        <div class="w3-container w3-content w3-center w3-padding-50" style="max-width:600px" id="usage">
+            <div style="height:50px; width:100%; clear:both;"></div>
+            <h2 class="w3-wide">USAGE</h2>
+            <p class="w3-opacity"><i>Usage discreption.</i></p>
+        </div>
+        <ul style="padding-left: 100px; padding-right: 100px;">
+            <li>The testing section sends to the NodeMCU and waits 5 seconds to respond to know if it is connected. For
+                testing STM-NodeMCU connection, NodeMCU sends to STM using UART and waits for respond.</li>
+            <br>
+            <li>The Linker script file <code style="background-color: lightgray; padding: 4px;">mem.id</code> should be
+                edited to change the flash size to 60KB as Boot Loader uses 4 KB and start address should be edited:
+                <br><br>
+                <code
+                    style="background-color: lightgray; padding: 4px;">FLASH (rx) : ORIGIN = 0x08001000, LENGTH = 60K</code>
+            </li>
+            <br>
+            <li>Uploading the code doesn't mean it's flashed, once the NodeMCU is connected to Internet and connected to
+                STM it will send the uploaded code to STM to flash</li>
+            <br>
+            <li>The full code is on GitHub Organization (The link below)</li>
+        </ul>
+        <h2 class="divider donotcross" contenteditable></h2>
 
         <!-- The Testing Section -->
-        <div class="w3-black" id="testing">
+        <div id="testing">
             <div class="w3-container w3-content w3-padding-32" style="max-width:800px">
                 <h2 class="w3-wide w3-center">TESTING</h2>
                 <p class="w3-opacity w3-center"><i>Test the communication between the website and NodeMCU & the
                         connection between NodeMCU and STM.</i></p><br>
                 <ul class="w3-ul w3-border w3-white w3-text-grey">
-                    <table style="width:70%">
+                    <table style="width:98%; margin: 5px">
                         <tr>
                             <td>Website - NodeMCU :</td>
-                            <td><span class="w3-tag w3-green w3-margin-left">CONNECTED</span></td>
-                            <td><button class="w3-button w3-black w3-section w3-right"
-                                    onclick="testConn()">Refresh</button></td>
+                            <td><span class="w3-tag w3-red w3-margin-left" id="web_node">NOT CONNECTED</span></td>
+                            <td><button class="w3-button w3-black w3-section w3-right buttonload"
+                                    onclick="testConnection()"><i class="fa-spin" style="margin-right: 10px;"
+                                        id="conn_button"></i>Refresh</button></td>
                         </tr>
                         <tr>
                             <td>NodeMCU - STM :</td>
-                            <td><span class="w3-tag w3-red w3-margin-left">NOT CONNECTED</span></td>
-                            <td><button class="w3-button w3-black w3-section w3-right"
-                                    onclick="testComm()">Refresh</button></td>
+                            <td><span class="w3-tag w3-red w3-margin-left" id="stm_node">NOT CONNECTED</span></td>
+                            <td><button class="w3-button w3-black w3-section w3-right buttonload"
+                                    onclick="testCommunication()"><i class="fa-spin" style="margin-right: 10px;"
+                                        id="comm_button"></i>Refresh</button></td>
                         </tr>
                         <tr>
-                            <td>Status :</td>
-                            <td><span class="w3-tag w3-green w3-margin-left">CONNECTED</span></td>
-                            <td><button class="w3-button w3-black w3-section w3-right"
-                                    onclick="testConn()">Refresh</button></td>
+                            <td>General Status :</td>
+                            <td><span class="w3-tag w3-red w3-margin-left" id="status_element">NOT READY TO FLASH</span>
+                            </td>
+                            <td><button class="w3-button w3-black w3-section w3-right buttonload" onclick="testAll()"><i
+                                        class="fa-spin" style="margin-right: 10px;" id="all_button"></i>Refresh</button>
+                            </td>
                         </tr>
                     </table>
                 </ul>
             </div>
         </div>
+        <h2 class="divider donotcross" contenteditable></h2>
+
         <!-- The Uploading Section -->
-        <div class="w3-black" id="uploading">
+        <div id="uploading">
             <div class="w3-container w3-content w3-padding-32" style="max-width:800px">
+
                 <h2 class="w3-wide w3-center">UPLOADING</h2>
                 <p class="w3-opacity w3-center"><i>Upload the file to NodeMCU</i></p><br>
-                <ul class="w3-ul w3-border w3-white w3-text-grey">
-                    <input type="file" id="myfile" name="myfile" accept=".hex">
-                    <div id="output"></div>
+                <ul class="w3-ul w3-border w3-white w3-text-grey" style="height: 250px; ">
+                    <div>
+                        <input type="file" id="myfile" name="myfile" accept=".hex" style="margin:16px; ">
+                    </div>
+                    <div>
+                        <textarea rows="5" cols="50" id="output" readonly
+                            style="font-family: 'Courier New', monospace; margin-left:16px; resize: none"> Please select a .hex file</textarea>
+                    </div>
+                    <button class="w3-button w3-black w3-section w3-right" onclick="upload()"
+                        style="margin-right:16px"><i class="fa-spin" style="margin-right: 10px;"
+                            id="upload_button"></i>Start Uploading</button>
+            </div>
+
+
+
+            </ul>
+        </div>
+    </div>
+    <h2 class="divider donotcross" contenteditable></h2>
+
+    <!-- The Code Section -->
+    <div class=" w3-container w3-content w3-padding-30" style="max-width:430px" id="code">
+        <div class="w3-row w3-padding-32">
+            <h2 class="w3-wide w3-center">CODE</h2>
+            <div class="w3-col m6 w3-large w3-margin-bottom">
+                <div class="github-card" data-github="ota-programmer" data-width="400" data-theme="medium"></div>
+            </div>
+        </div>
+    </div>
+    <h2 class="divider donotcross" contenteditable></h2>
+
+    <!-- The Developer Section -->
+    <div class="w3-container w3-content w3-padding-30 w3-center" style="max-width:430px" id="developer">
+        <div class="w3-row w3-padding-32 ">
+            <h2 class="w3-wide w3-center">DEVELOPER</h2>
+            <div class="w3-col m6 w3-large w3-margin-bottom ">
+                <div class="github-card" data-github="ahmadmhasann" data-width="400" data-theme="default"></div>
+                <ul class="w3-ul w3-border w3-white w3-text-grey " style="padding: 10px; width: 400px;">
+                    <i class="fa fa-phone" style="width:30px"></i> +20 102 424 2768<br>
+                    <i class="fa fa-map-marker" style="width:30px"></i> Cairo, Egypt<br>
+                    <i class="fa fa-envelope" style="width:30px"> </i> ahmadmhasann@gmail.com<br>
+                    <i class="fa fa-linkedin" style="width:30px"> </i> ahmadmhasann<br>
                 </ul>
             </div>
         </div>
-
-        <!-- Ticket Modal -->
-        <div id="upload" class="w3-modal">
-            <div class="w3-modal-content w3-animate-top w3-card-4">
-                <header class="w3-container w3-teal w3-center w3-padding-32">
-                    <span onclick="document.getElementById('ticketModal').style.display='none'"
-                        class="w3-button w3-teal w3-xlarge w3-display-topright">×</span>
-                    <h2 class="w3-wide"><i class="fa fa-suitcase w3-margin-right"></i>Tickets</h2>
-                </header>
-                <div class="w3-container">
-                    <p><label><i class="fa fa-shopping-cart"></i> Tickets, $15 per person</label></p>
-                    <input class="w3-input w3-border" type="text" placeholder="How many?">
-                    <p><label><i class="fa fa-user"></i> Send To</label></p>
-                    <input class="w3-input w3-border" type="text" placeholder="Enter email">
-                    <button class="w3-button w3-block w3-teal w3-padding-16 w3-section w3-right">PAY <i
-                            class="fa fa-check"></i></button>
-                    <button class="w3-button w3-red w3-section"
-                        onclick="document.getElementById('ticketModal').style.display='none'">Close <i
-                            class="fa fa-remove"></i></button>
-                    <p class="w3-right">Need <a href="#" class="w3-text-blue">help?</a></p>
-                </div>
-            </div>
-        </div>
-
-        <!-- The Contact Section -->
-        <div class="w3-container w3-content w3-padding-64" style="max-width:800px" id="contact">
-            <h2 class="w3-wide w3-center">CONTACT</h2>
-            <p class="w3-opacity w3-center"><i>Fan? Drop a note!</i></p>
-            <div class="w3-row w3-padding-32">
-                <div class="w3-col m6 w3-large w3-margin-bottom">
-                    <i class="fa fa-map-marker" style="width:30px"></i> Chicago, US<br>
-                    <i class="fa fa-phone" style="width:30px"></i> Phone: +00 151515<br>
-                    <i class="fa fa-envelope" style="width:30px"> </i> Email: mail@mail.com<br>
-                </div>
-                <div class="w3-col m6">
-                    <form action="/action_page.php" target="_blank">
-                        <div class="w3-row-padding" style="margin:0 -16px 8px -16px">
-                            <div class="w3-half">
-                                <input class="w3-input w3-border" type="text" placeholder="Name" required name="Name">
-                            </div>
-                            <div class="w3-half">
-                                <input class="w3-input w3-border" type="text" placeholder="Email" required name="Email">
-                            </div>
-                        </div>
-                        <input class="w3-input w3-border" type="text" placeholder="Message" required name="Message">
-                        <button class="w3-button w3-black w3-section w3-right" type="submit">SEND</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- End Page Content -->
     </div>
 
-    <!-- Image of location/map -->
-    <img src="/w3images/map.jpg" class="w3-image w3-greyscale-min" style="width:100%">
-
     <!-- Footer -->
-    <footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-grey w3-xlarge">
-        <i class="fa fa-facebook-official w3-hover-opacity"></i>
-        <i class="fa fa-instagram w3-hover-opacity"></i>
-        <i class="fa fa-snapchat w3-hover-opacity"></i>
-        <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-        <i class="fa fa-twitter w3-hover-opacity"></i>
-        <i class="fa fa-linkedin w3-hover-opacity"></i>
-        <p class="w3-medium">Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
+    <footer class="w3-container w3-padding-32 w3-center w3-opacity w3-light-grey w3-xlarge">
+        <a href="https://www.facebook.com/ahmadmhasann" style="margin: 10px;"><i
+                class="fa fa-facebook-official w3-hover-opacity"></i></a>
+        <a href="https://www.linkedin.com/in/ahmadmhasann/" style="margin: 10px;"><i
+                class="fa fa-linkedin w3-hover-opacity"></i></a>
+        <a href="mailto:ahmadmhasann@gmail.com" style="margin: 10px;"><i
+                class="fa fa-envelope w3-hover-opacity"></i></a>
+
         </p>
     </footer>
 
-    <script>
-        // Automatic Slideshow - change image every 4 seconds
-        var myIndex = 0;
-        carousel();
+    <script src="script.js"></script>
+    <script src="github_card.js"></script>
 
-        function carousel() {
-            var i;
-            var x = document.getElementsByClassName("mySlides");
-            for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";
-            }
-            myIndex++;
-            if (myIndex > x.length) { myIndex = 1 }
-            x[myIndex - 1].style.display = "block";
-            setTimeout(carousel, 4000);
-        }
-
-        // Used to toggle the menu on small screens when clicking on the menu button
-        function myFunction() {
-            var x = document.getElementById("navDemo");
-            if (x.className.indexOf("w3-show") == -1) {
-                x.className += " w3-show";
-            } else {
-                x.className = x.className.replace(" w3-show", "");
-            }
-        }
-
-        // When the user clicks anywhere outside of the modal, close it
-        var modal = document.getElementById('ticketModal');
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
-
-    <script>
-        var input = document.getElementById("myfile");
-        var output = document.getElementById("output");
-
-        input.addEventListener("change", function () {
-            if (this.files && this.files[0]) {
-                var myFile = this.files[0];
-                var reader = new FileReader();
-
-                reader.addEventListener('load', function (e) {
-                    var text = e.target.result;
-                    
-                    output.textContent = text;
-                });
-
-                reader.readAsBinaryString(myFile);
-            }
-        });
-
-    </script>
 
 
 

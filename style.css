@@ -1,0 +1,12 @@
+.donotcross {
+    overflow: hidden;
+    align-items: center;
+    background: hsl(0, 0%, 0%);
+    color: black;
+    height: 0.1em;
+    line-height: 2em;
+      
+  }  
+  .divider {
+    display: flex;
+      }
