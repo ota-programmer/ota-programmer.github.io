@@ -2,7 +2,7 @@
 <html lang="en">
 <title>OTA Programmer</title>
 <meta charset="UTF-8">
-<meta name="gc:base" content="http://lab.lepture.com/github-cards/">
+<meta name="gc:base" content="https://lab.lepture.com/github-cards/">
 <meta name="gc:theme" content="medium">
 <meta name="gc:client-id" content="client id string">
 <meta name="gc:client-secret" content="client secret string">
@@ -85,31 +85,15 @@
         <div id="testing">
             <div class="w3-container w3-content w3-padding-32" style="max-width:800px">
                 <h2 class="w3-wide w3-center">TESTING</h2>
-                <p class="w3-opacity w3-center"><i>Test the communication between the website and NodeMCU & the
-                        connection between NodeMCU and STM.</i></p><br>
+                <p class="w3-opacity w3-center"><i>Test the communication between the website and NodeMCU</i></p><br>
                 <ul class="w3-ul w3-border w3-white w3-text-grey">
                     <table style="width:98%; margin: 5px">
                         <tr>
-                            <td>Website - NodeMCU :</td>
+                            <td>NodeMCU Status</td>
                             <td><span class="w3-tag w3-red w3-margin-left" id="web_node">NOT CONNECTED</span></td>
                             <td><button class="w3-button w3-black w3-section w3-right buttonload"
                                     onclick="testConnection()"><i class="fa-spin" style="margin-right: 10px;"
                                         id="conn_button"></i>Refresh</button></td>
-                        </tr>
-                        <tr>
-                            <td>NodeMCU - STM :</td>
-                            <td><span class="w3-tag w3-red w3-margin-left" id="stm_node">NOT CONNECTED</span></td>
-                            <td><button class="w3-button w3-black w3-section w3-right buttonload"
-                                    onclick="testCommunication()"><i class="fa-spin" style="margin-right: 10px;"
-                                        id="comm_button"></i>Refresh</button></td>
-                        </tr>
-                        <tr>
-                            <td>General Status :</td>
-                            <td><span class="w3-tag w3-red w3-margin-left" id="status_element">NOT READY TO FLASH</span>
-                            </td>
-                            <td><button class="w3-button w3-black w3-section w3-right buttonload" onclick="testAll()"><i
-                                        class="fa-spin" style="margin-right: 10px;" id="all_button"></i>Refresh</button>
-                            </td>
                         </tr>
                     </table>
                 </ul>

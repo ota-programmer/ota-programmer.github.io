@@ -1,17 +1,14 @@
 var input = document.getElementById("myfile");
 var output = document.getElementById("output");
 var web_node = document.getElementById("web_node");
-var stm_node = document.getElementById("stm_node");
-var status_element = document.getElementById("status_element");
 
 var conn_button = document.getElementById("conn_button");
-var comm_button = document.getElementById("comm_button");
-var all_button = document.getElementById("all_button");
+
 var upload_button = document.getElementById("upload_button");
 
 var text = null
 var connection_status = 'NOT CONNECTED'
-var communication_status = 'NOT CONNECTED'
+
 input.addEventListener("change", function () {
     if (this.files && this.files[0]) {
         var myFile = this.files[0];
@@ -29,22 +26,40 @@ input.addEventListener("change", function () {
 });
 
 function upload() {
-    
+
     if (text != null) {
         upload_button.className = "fa fa-spinner fa-spin";
-        text_edited = text.replace(/\n|\r/g, "");
+        text_edited = text.replace(/\n|\r/g, " ");
+        var array = text_edited.split(" ");
+        var i = 0;
+        while (i < array.length) {
+            if (array[i] === "") {
+                array.splice(i, 1);
+            } else {
+                ++i;
+            }
+        }
         console.log("STARTING UPLOAD ....");
         const http = new EasyHTTP;
-        const data = {
-            hex: text_edited,
-            new: 'true'
-        }
-        http.put('https://ota-programmer-default-rtdb.firebaseio.com/hex.json', data)
+        http.put('https://ota-programmer-default-rtdb.firebaseio.com/line.json', array)
             .then(data => {
-                upload_button.className = "fa-spin"
-                alert ("Upload Success")
+                const code_data = {
+                    lines : array.length,
+                    new : true
+                };
+
+                http.put('https://ota-programmer-default-rtdb.firebaseio.com/code.json', code_data)
+                .then(data => {
+                    upload_button.className = "fa-spin"
+                    alert("Upload Success")
+    
+                })
+                .catch(err => console.log(err));
+
             })
             .catch(err => console.log(err));
+
+
     }
     else {
         alert("Please choose file to upload");
@@ -58,27 +73,6 @@ async function testConnection() {
         }
     )
 }
-function testCommunication() {
-    comm_button.className = "fa fa-spinner fa-spin"
-    test("https://ota-programmer-default-rtdb.firebaseio.com/communication.json").then(
-        () => {
-            comm_button.className = "fa-spin"
-        }
-    )
-}
-async function testAll() {
-    all_button.className = "fa fa-spinner fa-spin"
-    test("https://ota-programmer-default-rtdb.firebaseio.com/connection.json").then(
-        () => {
-            test("https://ota-programmer-default-rtdb.firebaseio.com/communication.json").then(
-                () => {
-                    all_button.className = "fa-spin"
-                }
-            )
-        }
-    );
-    
-}
 
 function test(url) {
     var result = null;
@@ -90,38 +84,19 @@ function test(url) {
         console.log("TESTING .......");
         http.put(url, data)
             .then(data => testSent(url).then((value) => {
-                if (url.includes("connection")) {
-                    connection_status = value;
-                    web_node.textContent = value;
-                    if (value == "CONNECTED") {
-                        web_node.className = "w3-tag w3-green w3-margin-left"
-                    }
-                    else if (value == "NOT CONNECTED") {
-                        web_node.className = "w3-tag w3-red w3-margin-left"
-                    }
+                connection_status = value;
+                web_node.textContent = value;
+                if (value == "CONNECTED") {
+                    web_node.className = "w3-tag w3-green w3-margin-left"
                 }
-                else if (url.includes("communication")) {
-                    communication_status = value;
-                    stm_node.textContent = value;
-                    web_node.textContent = value;
-                    if (value == "CONNECTED") {
-                        connection_status = value;
-                        status_element.textContent = "READY TO FLASH"
-                        status_element.className = "w3-tag w3-green w3-margin-left"
-                        stm_node.className = "w3-tag w3-green w3-margin-left"
-                        web_node.className = "w3-tag w3-green w3-margin-left"
-                    }
-                    else if (value == "NOT CONNECTED") {
-                        status_element.textContent = "NOT READY TO FLASH"
-                        stm_node.className = "w3-tag w3-red w3-margin-left"
-                        status_element.className = "w3-tag w3-red w3-margin-left"
-                    }
+                else if (value == "NOT CONNECTED") {
+                    web_node.className = "w3-tag w3-red w3-margin-left"
                 }
                 resolve(data);
             }
             ))
             .catch(err => console.log(err));
-        });
+    });
 
 }
 
