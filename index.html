@@ -48,11 +48,12 @@
         <div class="w3-container w3-content w3-center w3-padding-50" style="max-width:800px" id="home">
             <div style="height:50px; width:100%; clear:both;"></div>
             <img src="pic.jpg" style="width:90%">
-            <h2 class="w3-wide">OTA PROGRAMMER</h2>
             <p class="w3-opacity"><i>For STM32 Microcontroller</i></p>
-            <p class="w3-justify">On The Air Programmer developed to write .hex file in the Flash Memory of STM32 MCU.
-                The Programmer uses NodeMCU Board to recieve the .hex file from the website and sends it to STM via UART
-                to write the code using the Boot Loader flashed on STM.</p>
+            <p class="w3-justify">This project is implemented to program BlueBill Board (STM32 Micro-controller) over
+                the air using a website connected to a cloud database (Firebase) and NodeMCU board to get the code from
+                internet for sending it to STM.
+
+            </p>
 
         </div>
         <h2 class="divider donotcross" contenteditable></h2>
@@ -64,14 +65,14 @@
             <p class="w3-opacity"><i>Usage discreption.</i></p>
         </div>
         <ul style="padding-left: 100px; padding-right: 100px;">
-            <li>The testing section sends to the NodeMCU and waits 5 seconds to respond to know if it is connected. For
-                testing STM-NodeMCU connection, NodeMCU sends to STM using UART and waits for respond.</li>
+            <li>The testing section sends to the NodeMCU and waits 5 seconds to respond to know if it is connected to
+                Internet or not.</li>
             <br>
             <li>The Linker script file <code style="background-color: lightgray; padding: 4px;">mem.id</code> should be
-                edited to change the flash size to 60KB as Boot Loader uses 4 KB and start address should be edited:
+                edited to change the flash size to 56KB as Boot Loader uses 8 KB and start address should be edited:
                 <br><br>
                 <code
-                    style="background-color: lightgray; padding: 4px;">FLASH (rx) : ORIGIN = 0x08001000, LENGTH = 60K</code>
+                    style="background-color: lightgray; padding: 4px;">FLASH (rx) : ORIGIN = 0x08002000, LENGTH = 56K</code>
             </li>
             <br>
             <li>Uploading the code doesn't mean it's flashed, once the NodeMCU is connected to Internet and connected to
