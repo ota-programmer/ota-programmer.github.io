@@ -51,7 +51,7 @@
             <p class="w3-opacity"><i>For STM32 Microcontroller</i></p>
             <p class="w3-justify">This project is implemented to program BlueBill Board (STM32 Micro-controller) over
                 the air using a website connected to a cloud database (Firebase) and NodeMCU board to get the code from
-                internet for sending it to STM.
+                internet for sending it to STM to write it to the Flash Memory using the Bootloader flashed on the first 8 kB of Flash Memory.
 
             </p>
 
@@ -108,6 +108,19 @@
 
                 <h2 class="w3-wide w3-center">UPLOADING</h2>
                 <p class="w3-opacity w3-center"><i>Upload the file to NodeMCU</i></p><br>
+                <div class="dropdown">
+                    <button class="dropbtn">Choose Example</button>
+                    <div class="dropdown-content">
+                        <a href="javascript:example1();">Blink built-in LED every 100 ms</a>
+                        <a href="javascript:example2();">Blink built-in LED every 500 ms</a>
+                        <a href="javascript:example3();">Blink built-in LED every 100,100,500 ms</a>
+                    </div>
+                </div>
+
+                <br><br>   
+
+                <h5 id = "example_name" style="font-family: 'Courier New', monospace; margin-left:16px; "></h5>
+
                 <ul class="w3-ul w3-border w3-white w3-text-grey" style="height: 250px; ">
                     <div>
                         <input type="file" id="myfile" name="myfile" accept=".hex" style="margin:16px; ">
